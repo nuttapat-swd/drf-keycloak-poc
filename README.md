@@ -120,10 +120,11 @@ KEYCLOAK_ADMIN_PASSWORD=
 > eval $(poetry env activate)
 ```
 
-2. Run migration at first time and run app:
+4. Run migration at first time and run app:
 
 ```bash
 > python manage.py migrate
 > python manage.py runserver 0.0.0.0:8000
 ```
 
+5. Test by Postman: [collection](drf-keycloak-poc.postman_collection.json) or Frontend: [next-oauth-code-poc](https://github.com/nuttapat-swd/next-oauth-code-poc)
