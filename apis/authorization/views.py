@@ -4,7 +4,7 @@ from rest_framework import status
 from django.contrib.auth.hashers import make_password
 
 from apis.authorization.models import User
-from apis.authorization.keycloak import FMKeycloakAdmin
+from apis.authorization.keycloak import DEMOKeycloakAdmin
 
 # Create your views here.
 
@@ -34,7 +34,7 @@ class AddUserView(APIView):
             }
             
             # Create user in Keycloak
-            keycloak_admin = FMKeycloakAdmin()
+            keycloak_admin = DEMOKeycloakAdmin()
             kc_user_id = keycloak_admin.create_keycloak_user(payload)
 
             # Create user in Django

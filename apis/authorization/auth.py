@@ -6,10 +6,10 @@ from django.contrib.auth import get_user_model
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
-from apis.authorization.keycloak import FMKeycloakOpenID
+from apis.authorization.keycloak import DEMOKeycloakOpenID
 
 User = get_user_model()
-keycloak_openid = FMKeycloakOpenID()
+keycloak_openid = DEMOKeycloakOpenID()
 
 class KeycloakAuthentication(BaseAuthentication):
 

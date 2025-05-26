@@ -1,7 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
+from logging import getLogger
+logger = getLogger(__name__)
 
 class ResourceView(APIView):
     # permission_classes = []  # No permissions required for this example
@@ -10,7 +11,9 @@ class ResourceView(APIView):
         """
         Example GET endpoint that returns a simple message.
         """
-        print(getattr(request, 'user', None))  # Debugging line to check user
+        logger.info("GET request received at ResourceView")
+        logger.info(f"User: {request.user}, Authenticated: {request.user.is_authenticated}")
+
         return Response({"message": "This is a protected resource."}, status=status.HTTP_200_OK)
 
     def post(self, request):

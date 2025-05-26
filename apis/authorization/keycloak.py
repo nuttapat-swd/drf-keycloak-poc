@@ -2,7 +2,7 @@ from django.conf import settings
 from keycloak.keycloak_admin import KeycloakAdmin
 from keycloak import KeycloakOpenID
 
-class FMKeycloakAdmin(KeycloakAdmin):
+class DEMOKeycloakAdmin(KeycloakAdmin):
 
     def __init__(self):
         super().__init__(
@@ -50,7 +50,7 @@ class FMKeycloakAdmin(KeycloakAdmin):
         return self.create_user(payload=user_data)
 
 
-class FMKeycloakOpenID(KeycloakOpenID):
+class DEMOKeycloakOpenID(KeycloakOpenID):
 
     def __init__(self):
         super().__init__(
