@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv(override=True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-c*dbqag%9mg+%b2)^nhp)@vr+r2vfhmlxoexq#r%#qmu&#e1dq'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS=os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
 
 
 # Application definition
@@ -138,21 +141,19 @@ REST_FRAMEWORK = {
 }
 
 KEYCLOAK = {
-    'KEYCLOAK_URL': 'http://localhost:8880',
+    'KEYCLOAK_URL': os.getenv('KEYCLOAK_URL', 'http://localhost:8080'),
     'KEYCLOAK_ADMIN_REALM': 'master',  # Admin users are typically in the master realm
-    'KEYCLOAK_REALM': 'fm-dev',
-    'KEYCLOAK_CLIENT_ID': '82d952fd-21f7-49cd-84c4-7dc5837c3bf1',
-    'KEYCLOAK_CLIENT_SECRET': 'N9wmvJ5D0KW1GmE3T1RHR1Ax8HcuwnyU',
-    'KEYCLOAK_ADMIN_USERNAME': 'admin',
-    'KEYCLOAK_ADMIN_PASSWORD': 'admin'
+    'KEYCLOAK_REALM': os.getenv('KEYCLOAK_REALM', ''),
+    'KEYCLOAK_CLIENT_ID': os.getenv('KEYCLOAK_CLIENT_ID', ''),
+    'KEYCLOAK_CLIENT_SECRET': os.getenv('KEYCLOAK_CLIENT_SECRET', ''),
+    'KEYCLOAK_ADMIN_USERNAME': os.getenv('KEYCLOAK_ADMIN_USERNAME', ''),
+    'KEYCLOAK_ADMIN_PASSWORD':os.getenv('KEYCLOAK_ADMIN_PASSWORD', ''),
 }
 
 from corsheaders.defaults import default_headers
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3001",  # Make sure this matches your frontend's URL
-]
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3001']
+CORS_ALLOW_CREDENTIALS = os.getenv('CORS_ALLOW_CREDENTIALS', 'false').lower() == 'true'
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 CORS_ALLOW_HEADERS = (
     *default_headers,
     'authorization'
