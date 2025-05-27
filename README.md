@@ -24,6 +24,62 @@ sequenceDiagram
   Resoure->>Web: Return Reponse
 ```
 
+setting.py
+```setting.py
+...
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'apis.authorization.auth.KeycloakAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+...
+```
+
+
+```python
+class KeycloakAuthentication(BaseAuthentication):
+
+    def authenticate(self, request):
+        auth = request.headers.get('Authorization', None)
+        if not auth or not auth.startswith("Bearer "):
+            return None
+
+        token = auth.split(" ")[1]
+        try:
+            # Validate the token
+            token_info = keycloak_openid.introspect(token)
+            if not token_info.get('active'):
+                return None
+                # raise AuthenticationFailed("Token is not active")
+
+            # Optionally decode token to get claims
+            userinfo = keycloak_openid.userinfo(token)
+            username = userinfo.get('preferred_username')
+            email = userinfo.get('email', '')
+
+            if not username:
+                return None
+                # raise AuthenticationFailed("Username missing in token claims")
+
+        except Exception as e:
+            raise AuthenticationFailed(f"Token validation failed: {str(e)}")
+
+        # Create or get Django user
+        user, created = User.objects.get_or_create(
+            username=username,
+            defaults={'email': email}
+        )
+        if created:
+            user.set_unusable_password()
+            user.save()
+
+        return (user, None)
+```
+
+
 ---
 
 ## 🚀 Getting Started
